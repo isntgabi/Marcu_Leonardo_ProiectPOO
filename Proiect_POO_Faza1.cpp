@@ -1,15 +1,15 @@
 #include<iostream>
 using namespace std;
 
-class MarcuLeonardo_Pacient {
-public:
+class Pacient {
+private:
 	string nume;
 	int varsta;
 	static int numar_total_pacienti;
 	const string camera_consultatie;
 	int* id;
-
-	MarcuLeonardo_Pacient() : camera_consultatie("Camera 100")
+public: 
+	Pacient() : camera_consultatie("Camera 100")
 	{
 		this->nume = "Andrei";
 		this->varsta = 18;
@@ -17,7 +17,7 @@ public:
 		numar_total_pacienti++;
 	}
 
-	MarcuLeonardo_Pacient(string numepacient, const string camera) : camera_consultatie(camera)
+	Pacient(string numepacient, const string camera) : camera_consultatie(camera)
 	{
 		this->nume = numepacient;
 		this->varsta = 19;
@@ -25,7 +25,7 @@ public:
 		numar_total_pacienti++;
 	}
 
-	MarcuLeonardo_Pacient(string numepacient, int varstapacient, int idul, const string camera) : camera_consultatie(camera)
+	Pacient(string numepacient, int varstapacient, int idul, const string camera) : camera_consultatie(camera)
 	{
 		this->nume = numepacient;
 		this->varsta = varstapacient;
@@ -34,8 +34,42 @@ public:
 
 	}
 
-	~MarcuLeonardo_Pacient() {
+	~Pacient() {
 		delete id;
+	}
+	Pacient(const Pacient& p) : camera_consultatie(p.camera_consultatie) {
+		nume = p.nume;
+		varsta = p.varsta;
+		id = new int(*p.id);
+		numar_total_pacienti++;
+	}
+
+	string getNume() const {
+		return nume;
+	}
+
+	int getID() const {
+		return *id;
+	}
+
+	void setNume(const string& NumeNou) {
+		nume = NumeNou;
+	}
+
+	int GetVarsta() const {
+		return varsta;
+	}
+
+	void SetVarsta(int VarstaNoua) {
+		varsta = VarstaNoua;
+	}
+
+	string GetCamera() const {
+		return camera_consultatie;
+	}
+	
+	int GetID() const {
+		return *id;
 	}
 
 	static int Numarul_Total_Al_Pacientilor() {
@@ -43,22 +77,33 @@ public:
 	}
 
 	void afisare_pacient() {
-		cout << "Nume: " << MarcuLeonardo_Pacient::nume << "; Varsta: " << MarcuLeonardo_Pacient::varsta << "; Camera: " << MarcuLeonardo_Pacient::camera_consultatie << "; ID: " << *id << endl;
+		cout << "Nume: " << Pacient::nume << "; Varsta: " << Pacient::varsta << "; Camera: " << Pacient::camera_consultatie << "; ID: " << *id << endl;
 	}
+
+	friend void Functie1(const Pacient& pacient);
+	friend void Functie2(const Pacient& pacient);
 };
 
-int MarcuLeonardo_Pacient::numar_total_pacienti = 0;
+int Pacient::numar_total_pacienti = 0;
 
-class MarcuLeonardo_Medicament {
-public:
+void Functie1(const Pacient& pacient) {
+	cout << "Nume pacient: " << pacient.getNume() << endl;
+}
+
+void Functie2(const Pacient& pacient) {
+	cout << "Varsta pacient: " << pacient.GetVarsta() << endl;
+}
+class Medicament {
+private:
 	string nume;
 	float pret;
 	int cantitate;
 	const string categorie;
 	static int numar_total_medicamente;
 	int* cod;
+public:
 
-	MarcuLeonardo_Medicament() : categorie("Administrare Orala")
+	Medicament() : categorie("Administrare Orala")
 	{
 		this->nume = "Paracetamol";
 		this->pret = 0.75;
@@ -67,7 +112,7 @@ public:
 		numar_total_medicamente++;
 	}
 
-	MarcuLeonardo_Medicament(string numemedicament, const string cat) : categorie(cat)
+	Medicament(string numemedicament, const string cat) : categorie(cat)
 	{
 		this->nume = numemedicament;
 		this->pret = 2.75;
@@ -76,7 +121,7 @@ public:
 		numar_total_medicamente++;
 	}
 
-	MarcuLeonardo_Medicament(string nume, float pret, int q, int codul, const string cat) : categorie(cat)
+	Medicament(string nume, float pret, int q, int codul, const string cat) : categorie(cat)
 	{
 		this->nume = nume;
 		this->pret = pret;
@@ -85,9 +130,35 @@ public:
 		numar_total_medicamente++;
 	}
 
-	~MarcuLeonardo_Medicament() {
+	~Medicament() {
 		delete cod;
 	}
+
+	string getNume() const {
+		return nume;
+	}
+
+	float getPret() const {
+		return pret;
+	}
+
+	int getCod() const {
+		return *cod;
+	}
+	int getCantitate() const {
+		return cantitate;
+	}
+
+	string getCategorie() const {
+		return categorie;
+	}
+	void setNume(const string& NumeNou) {
+		nume = NumeNou;
+	}
+	void setCantitate(int cantitateNoua) {
+		cantitate = cantitateNoua;
+	}
+
 
 	static int nrmed() {
 		return numar_total_medicamente;
@@ -98,21 +169,34 @@ public:
 	}
 
 	void afisare_medicament() {
-		cout << "Numele medicamentului: " << MarcuLeonardo_Medicament::nume << "; Cantitatea lui: " << MarcuLeonardo_Medicament::cantitate << "; Pretul pe pastila: " << MarcuLeonardo_Medicament::pret << "; Categoria din care face parte: " << MarcuLeonardo_Medicament::categorie << "; Codul aferent: " << *cod << "; Pretul final: " << MarcuLeonardo_Medicament::calcul(pret, cantitate) << endl;
+		cout << "Numele medicamentului: " << Medicament::nume << "; Cantitatea lui: " << Medicament::cantitate << "; Pretul pe pastila: " << Medicament::pret << "; Categoria din care face parte: " << Medicament::categorie << "; Codul aferent: " << *cod << "; Pretul final: " << Medicament::calcul(pret, cantitate) << endl;
 	}
+
+	friend void Functie3(const Medicament& medicament);
+	friend void Functie4(const Medicament& medicament);
 };
 
-int MarcuLeonardo_Medicament::numar_total_medicamente = 0;
+int Medicament::numar_total_medicamente = 0;
 
-class MarcuLeonardo_PersonalMedical {
-public:
+void Functie3(const Medicament& medicament) {
+	float valoare = medicament.pret * medicament.cantitate;
+	cout << "Medicamentul " << medicament.nume << " are valoarea stocului de: " << valoare << endl;
+}
+
+void Functie4(const Medicament& medicament) {
+	cout << "Medicamentul " << medicament.nume << " face parte din categoria: " << medicament.categorie << endl;
+}
+
+class PersonalMedical {
+private:
 	string nume;
 	float salariu;
 	const string spital;
 	static int numar_total_personal;
 	char* specializare;
+public:
 
-	MarcuLeonardo_PersonalMedical(const char* special) : spital("Floreasca")
+	PersonalMedical(const char* special) : spital("Floreasca")
 	{
 		this->nume = "Andreea Glavan";
 		this->salariu = 6500;
@@ -121,7 +205,7 @@ public:
 		numar_total_personal++;
 	}
 
-	MarcuLeonardo_PersonalMedical(const char* special, string nume) : spital("Floreasca")
+	PersonalMedical(const char* special, string nume) : spital("Floreasca")
 	{
 		this->nume = nume;
 		this->salariu = 10000;
@@ -130,7 +214,7 @@ public:
 		numar_total_personal++;
 	}
 
-	MarcuLeonardo_PersonalMedical(string nume, float salariu, const char* special, const string sp) : spital(sp)
+	PersonalMedical(string nume, float salariu, const char* special, const string sp) : spital(sp)
 	{
 		this->nume = nume;
 		this->salariu = salariu;
@@ -143,16 +227,53 @@ public:
 		return numar_total_personal;
 	}
 
-	~MarcuLeonardo_PersonalMedical() {
+	~PersonalMedical() {
 		delete[] specializare;
 	}
 
-	void afisare_personal() {
-		cout << "Nume: " << MarcuLeonardo_PersonalMedical::nume << "; Salariul pe care il are: " << MarcuLeonardo_PersonalMedical::salariu << "; Specializarea: " << specializare << "; Spitalul de care apartine: " << MarcuLeonardo_PersonalMedical::spital << endl;
+	string getNume() const {
+		return nume;
 	}
+
+	float getSalariu() const {
+		return salariu;
+	}
+
+	string getSpital() const {
+		return spital;
+	}
+
+	char getSpecializare() const {
+		return *specializare;
+	}
+
+	void setNume(const string& nume) {
+		this->nume = nume;
+	}
+
+	void setSalariu(const float& salariu) {
+		this->salariu = salariu;
+	}
+
+	void afisare_personal() {
+		cout << "Nume: " << PersonalMedical::nume << "; Salariul pe care il are: " << PersonalMedical::salariu << "; Specializarea: " << specializare << "; Spitalul de care apartine: " << PersonalMedical::spital << endl;
+	}
+
+	friend void Functie5(const PersonalMedical& personal);
+	friend void Functie6(const PersonalMedical& personal);
 };
 
-int MarcuLeonardo_PersonalMedical::numar_total_personal = 0;
+int PersonalMedical::numar_total_personal = 0;
+
+void Functie5(const PersonalMedical& personal)
+{
+	cout << "Numele personalului medical este: " << personal.getNume() << endl;
+}
+
+void Functie6(const PersonalMedical& personal)
+{
+	cout << "Salariul persoanei " << personal.getNume() << " este de: " << personal.getSalariu();
+}
 
 int main() {
 
@@ -160,53 +281,77 @@ int main() {
 	cout << "-------- PACIENT --------" << endl;
 	cout << "" << endl;
 
-	MarcuLeonardo_Pacient pacient0;
+	Pacient pacient0;
 	pacient0.afisare_pacient();
-	MarcuLeonardo_Pacient pacient1("Gabriel", "Camera 101");
+	Pacient pacient1("Gabriel", "Camera 101");
 	pacient1.afisare_pacient();
-	MarcuLeonardo_Pacient pacient2("Andreea", 20, 2, "Camera 102");
+	Pacient pacient2("Andreea", 20, 2, "Camera 102");
 	pacient2.afisare_pacient();
-	int x = MarcuLeonardo_Pacient::Numarul_Total_Al_Pacientilor();
+	int x = Pacient::Numarul_Total_Al_Pacientilor();
 	cout << "Numarul total de pacienti este: " << x << endl;
 	cout << "" << endl;
 
-	delete pacient0.id;
-	delete pacient1.id;
-	delete pacient2.id;
+	Pacient pacient3 = pacient2; // constructorul de copiere
+	cout << "Nume pacient 3: " << pacient3.getNume() << endl;
+	cout << "Varsta pacient 3: " << pacient3.GetVarsta() << endl;
+
+	pacient1.setNume("Cristina");
+	pacient1.SetVarsta(25);
+
+	cout << "Nume pacient 1: " << pacient1.getNume() << endl;
+	cout << "Varsta pacient 1: " << pacient1.GetVarsta() << endl;
+
+	Functie1(pacient2);
+	Functie2(pacient3);
 
 	// CLASA 2
+	cout << "" << endl;
 	cout << "------- MEDICAMENTE -------" << endl;
 	cout << "" << endl;
 
-	MarcuLeonardo_Medicament medicament1;
+	Medicament medicament1;
 	medicament1.afisare_medicament();
-	MarcuLeonardo_Medicament medicament2("Bioflu", "Administrare nazala");
+	Medicament medicament2("Bioflu", "Administrare nazala");
 	medicament2.afisare_medicament();
-	MarcuLeonardo_Medicament medicament3("Tension", 1, 5, 102, "Administrare sublinguala");
+	Medicament medicament3("Tension", 1, 5, 102, "Administrare sublinguala");
 	medicament3.afisare_medicament();
-	int y = MarcuLeonardo_Medicament::nrmed();
+	int y = Medicament::nrmed();
 	cout << "Numarul total de medicamente este: " << y << endl;
 
-	delete medicament1.cod;
-	delete medicament2.cod;
-	delete medicament3.cod;
+	Medicament medicament4 = medicament3; // constructorul de copiere
+	cout << "Nume medicament 3: " << medicament3.getNume() << endl;
+	cout << "Categorie medicament 3: " << medicament3.getCategorie() << endl;
+	medicament4.afisare_medicament();
+
+	medicament3.setNume("Tertensif");
+	medicament3.setCantitate(10);
+
+	Functie3(medicament2);
+	Functie4(medicament3);
+
 
 	// CLASA 3
 	cout << "" << endl;
 	cout << "---------- PERSONALUL MEDICAL ----------" << endl;
 	cout << "" << endl;
 
-	MarcuLeonardo_PersonalMedical personal1("Chirurgie");
+	PersonalMedical personal1("Chirurgie");
 	personal1.afisare_personal();
-	MarcuLeonardo_PersonalMedical personal2("Neurologie", "Andrei Nistor");
+	PersonalMedical personal2("Neurologie", "Andrei Nistor");
 	personal2.afisare_personal();
-	MarcuLeonardo_PersonalMedical personal3("Dinu Maria", 12000, "Patologie", "Bucuresti");
+	PersonalMedical personal3("Dinu Maria", 12000, "Patologie", "Bucuresti");
 	personal3.afisare_personal();
-	int z = MarcuLeonardo_PersonalMedical::nr_pers();
+	int z = PersonalMedical::nr_pers();
 	cout << "Numarul total de personal este: " << z << endl;
 
-	delete[] personal1.specializare;
-	delete[] personal2.specializare;
-	delete[] personal3.specializare;
+	PersonalMedical personal4 = personal3; // constructorul de copiere
+	cout << "Nume personal medical 3: " << personal3.getNume() << endl;
+	cout << "Salariul personalului medical 3: " << personal3.getSalariu() << endl;
+
+	personal3.setNume("Maria Bica");
+	personal3.setSalariu(11345);
+
+	Functie5(personal3);
+	Functie6(personal4);
 
 }
