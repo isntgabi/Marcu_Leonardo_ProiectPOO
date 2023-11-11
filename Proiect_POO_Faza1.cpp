@@ -246,6 +246,25 @@ public:
 
 		return tastatura;
 	}
+
+	bool operator<(const Pacient& pacient)
+	{
+		if (this->greutate < pacient.greutate)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator>(const Pacient& pacient)
+	{
+		if (this->greutate > pacient.greutate)
+		{
+			return true;
+		}
+		return false;
+	}
+
 };
 
 void calcul_imc(const Pacient& pacient) {
@@ -802,6 +821,24 @@ int main() {
 	cin >> pacient5;
 	cout << pacient5;
 
+	if (pacient1 < pacient2)
+	{
+		cout << "Pacientul " << pacient2.getNume()  << " are o greutate mai mare decat " << pacient1.getNume();
+	}
+	else
+	{
+		cout << "Pacientul " << pacient1.getNume() << " are o greutate mai mare decat " << pacient2.getNume();
+	}
+
+	if (pacient2 > pacient3)
+	{
+		cout << "Pacientul " << pacient2.getNume() << " are o greutate mai mare decat " << pacient3.getNume();
+	}
+	else
+	{
+		cout << "Pacientul " << pacient3.getNume() << " are o greutate mai mare decat " << pacient2.getNume();
+	}
+
 	cout << "" << endl;
 
 	//CLASA 2 - MEDICAMENT
@@ -820,9 +857,6 @@ int main() {
 	{
 		cout << v_medicamente[i] << endl;
 	}
-
-
-
 
 	Medicament medicament0;
 	medicament0.afisare_medicament();
