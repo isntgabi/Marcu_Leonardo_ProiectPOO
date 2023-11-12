@@ -235,7 +235,7 @@ public:
 	}
 
 	friend istream& operator>>(istream& tastatura, Pacient& pacient) {
-		cout << "Introduceti numele pacientului: "; getline(tastatura, pacient.nume);
+		cout << "Introduceti numele pacientului: "; tastatura >> pacient.nume;
 		cout << "Introduceti varsta pacientului: "; tastatura >> pacient.varsta;
 		cout << "Introduceti genul pacientului: "; tastatura >> pacient.gen;
 		cout << "Introduceti inaltimea pacientului: "; tastatura >> pacient.inaltime;
@@ -754,11 +754,16 @@ int main() {
 	cout << "" << endl;
 
 	//vector de obiecte
+	
 	Pacient pacientii[3];
 	
-	pacientii[0] = Pacient();
+	for (int i = 0; i < 3; i++)
+	{
+		cin >> pacientii[i];
+	}
+	/*pacientii[0] = Pacient();
 	pacientii[1] = Pacient("Monica Mitroi", 22, "Feminin");
-	pacientii[2] = Pacient("Ioana Popescu", 35, "Feminin", 1, 99, "Camera 104", 165, 59);
+	pacientii[2] = Pacient("Ioana Popescu", 35, "Feminin", 1, 99, "Camera 104", 165, 59);*/
 
 
 	//afisare vector de obiecte
@@ -820,6 +825,7 @@ int main() {
 	Pacient pacient5 = pacient0;
 	cin >> pacient5;
 	cout << pacient5;
+	
 
 	if (pacient1 < pacient2)
 	{
@@ -847,9 +853,14 @@ int main() {
 
 	//vector de medicamente
 	Medicament v_medicamente[3];
-	v_medicamente[0] = Medicament();
+
+	for (int i = 0; i < 3; i++)
+	{
+		cin >> v_medicamente[i];
+	}
+	/*v_medicamente[0] = Medicament();
 	v_medicamente[1] = Medicament("Nazalist", "Administrare nazala");
-	v_medicamente[2] = Medicament("Alfamil", "Administrare orala");
+	v_medicamente[2] = Medicament("Alfamil", "Administrare orala");*/
 
 	//afisare vector de medicamente
 	cout << "VECTOR MEDICAMENTE" << endl;
@@ -860,6 +871,7 @@ int main() {
 
 	Medicament medicament0;
 	medicament0.afisare_medicament();
+	cout << medicament0.getCod() << " AICI E GETCOD UL TAU";
 	Medicament medicament1("Bioflu", "Administrare Nazala");
 	medicament1.afisare_medicament();
 	Medicament medicament2("Tertensif", 3, "Administrare Sublinguala");
@@ -906,9 +918,13 @@ int main() {
 	//vector de personal medical
 	PersonalMedical v_personal[3];
 
-	v_personal[0] = PersonalMedical("Dr. Cristescu Marta", 9194);
-	v_personal[1] = PersonalMedical("Dr. Andreescu Alex", 6955);
-	v_personal[2] = PersonalMedical("Dr. Dinca Mariana", 10000, "Patologie");
+	for (int i = 0; i < 3; i++)
+	{
+		cin >> v_personal[i];
+	}
+	//v_personal[0] = PersonalMedical("Dr. Cristescu Marta", 9194);
+	//v_personal[1] = PersonalMedical("Dr. Andreescu Alex", 6955);
+	//v_personal[2] = PersonalMedical("Dr. Dinca Mariana", 10000, "Patologie");
 
 	cout << "VECTOR DE PERSONAL MEDICAL";
 	for (int i = 0; i < 3; i++)
