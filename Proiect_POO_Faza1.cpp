@@ -395,7 +395,7 @@ public:
 	}
 
 	int getCod() {
-		if (cod = nullptr)
+		if (cod != nullptr)
 		{
 			return *this->cod;
 		}
