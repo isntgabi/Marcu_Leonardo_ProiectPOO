@@ -1,13 +1,14 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 #include<string>
 #include<fstream>
 #include<vector>
 using namespace std;
 
-//domeniul MedicaL
+//acest proiect cuprinde aplicarea conceptelor de baza invatate in cadrul materiei ~Programare Orientata Obiect~
 
-//clasa abstracta - Spital
+
+//clasa abstracta
 class Spital
 {
 private:
@@ -477,7 +478,7 @@ void reducere(const Pacient& pacient)
 }
 
 //relatia de is-a (mostenire)
-class DetaliiSanatate : public Pacient
+class PacientSanatos : public Pacient
 {
 private:
 
@@ -489,7 +490,7 @@ private:
 
 public:
 
-	DetaliiSanatate() : Pacient()
+	PacientSanatos() : Pacient()
 	{
 		this->nrConsultatii = 3;
 		this->frecventaCardiaca = new int[this->nrConsultatii];
@@ -502,7 +503,7 @@ public:
 		this->diastolica = 80;
 	}
 
-	DetaliiSanatate(int nrConsultatii, int* frecventa, int nivelZaharSange, int sistolica, int diastolica, const char* nume, const string camera_consultatie, int varsta, string gen, bool analize, float inaltime, float greutate) : Pacient(nume, camera_consultatie, varsta, gen, analize, inaltime, greutate)
+	PacientSanatos(int nrConsultatii, int* frecventa, int nivelZaharSange, int sistolica, int diastolica, const char* nume, const string camera_consultatie, int varsta, string gen, bool analize, float inaltime, float greutate) : Pacient(nume, camera_consultatie, varsta, gen, analize, inaltime, greutate)
 	{
 
 		this->nrConsultatii = nrConsultatii;
@@ -518,7 +519,7 @@ public:
 	}
 
 	//constructor de copiere
-	DetaliiSanatate(const DetaliiSanatate& ds) : Pacient(ds)
+	PacientSanatos(const PacientSanatos& ds) : Pacient(ds)
 	{
 
 		this->nrConsultatii = ds.nrConsultatii;
@@ -534,7 +535,7 @@ public:
 	}
 
 	//destructor
-	~DetaliiSanatate()
+	~PacientSanatos()
 	{
 		if (this->frecventaCardiaca != NULL)
 		{
@@ -543,7 +544,7 @@ public:
 	}
 
 	//operator=
-	DetaliiSanatate& operator=(DetaliiSanatate& ds)
+	PacientSanatos& operator=(PacientSanatos& ds)
 	{
 		if (this != &ds)
 		{
@@ -568,7 +569,7 @@ public:
 
 
 	//operatorul << de afisare
-	friend ostream& operator<<(ostream& out, const DetaliiSanatate& ds)
+	friend ostream& operator<<(ostream& out, const PacientSanatos& ds)
 	{
 
 		out << (Pacient&)ds; //si pentru pacient
@@ -709,10 +710,10 @@ public:
 		}
 	}
 
-	friend void detaliiNivelZahar(const DetaliiSanatate& ds);
+	friend void detaliiNivelZahar(const PacientSanatos& ds);
 };
 
-void detaliiNivelZahar(const DetaliiSanatate& ds)
+void detaliiNivelZahar(const PacientSanatos& ds)
 {
 	cout << "Detalii despre nivelul zaharului din sange:" << endl;
 	cout << "Nivelul actual: " << ds.nivelZaharSange << " mg/dL" << endl;
@@ -728,42 +729,41 @@ void detaliiNivelZahar(const DetaliiSanatate& ds)
 	}
 }
 
-//clasa abstracta - Laborator
-class Laborator
+//clasa abstracta
+class Pastila
 {
 private:
 
-	string nume;
+	string nume_substanta_principala;
 	int numar_substante;
-	int numar_medicamente_realizate;
+
 
 public:
 
-	virtual ~Laborator() {}
+	virtual ~Pastila() {}
 
 	virtual void metodaPura() = 0;
 
-	Laborator()
+	Pastila()
 	{
-		this->nume = "Laboratorul National";
+		this->nume_substanta_principala = "Paracetamol";
 		this->numar_substante = 40000;
-		this->numar_medicamente_realizate = 250000;
+
 	}
 
 	virtual double valori_medicamente() = 0;
 
-	Laborator(string nume, int numar_substante, int numar_medicamente_realizate)
+	Pastila(string nume, int numar_substante, int numar_medicamente_realizate)
 	{
-		this->nume = nume;
+		this->nume_substanta_principala = nume;
 		this->numar_substante = numar_substante;
-		this->numar_medicamente_realizate = numar_medicamente_realizate;
+
 	}
 
-	friend ostream& operator<<(ostream& out, const Laborator& l)
+	friend ostream& operator<<(ostream& out, const Pastila& l)
 	{
-		out << l.nume << endl;
+		out << l.nume_substanta_principala << endl;
 		out << l.numar_substante << endl;
-		out << l.numar_medicamente_realizate << endl;
 
 		return out;
 
@@ -771,7 +771,7 @@ public:
 
 };
 
-class Medicament : public Laborator
+class Medicament : public Pastila
 {
 private:
 
@@ -1156,7 +1156,8 @@ void efecte_secundare(const Medicament& medicament)
 class Farmacie {
 private:
 	string numeFarmacie;
-	Medicament modelMedicament;
+	int nrMedicamente;
+	Medicament** medicamente; //vector de pointeri la obiecte
 	string contactTelefon;
 	string adresa;
 	bool tensiuneArteriala;
@@ -1169,28 +1170,44 @@ public:
 		this->adresa = "Strada Soarelui";
 		this->contactTelefon = "07100100";
 		this->tensiuneArteriala = 1;
+		this->nrMedicamente = 0;
+		this->medicamente = nullptr;
 
 	}
 
-	Farmacie(string numeFarmacie, const Medicament& medicament)
+	Farmacie(string numeFarmacie)
 	{
 
 		this->numeFarmacie = numeFarmacie;
 		this->adresa = "Bulevardul Unirii";
 		this->contactTelefon = "03452100";
 		this->tensiuneArteriala = 1;
-		this->modelMedicament = medicament;
+		this->nrMedicamente = 0;
+		this->medicamente = nullptr;
 
 	}
 
-	Farmacie(string numeFarmacie, string contact, string adresa, bool tensiune, const Medicament& medicament)
+	Farmacie(string numeFarmacie, string contact, string adresa, bool tensiune, Medicament** medicamente, int nrMedicamente)
 	{
 
 		this->numeFarmacie = numeFarmacie;
 		this->contactTelefon = contact;
 		this->adresa = adresa;
 		this->tensiuneArteriala = tensiune;
-		this->modelMedicament = medicament;
+		if (nrMedicamente > 0 && medicamente != nullptr)
+		{
+			this->nrMedicamente = nrMedicamente;
+			this->medicamente = new Medicament * [this->nrMedicamente];
+			for (int i = 0; i < this->nrMedicamente; i++)
+			{
+				this->medicamente[i] = new Medicament(*medicamente[i]);
+			}
+		}
+		else
+		{
+			this->nrMedicamente = 0;
+			this->medicamente = nullptr;
+		}
 
 	}
 
@@ -1201,7 +1218,20 @@ public:
 		this->contactTelefon = f.contactTelefon;
 		this->adresa = f.adresa;
 		this->tensiuneArteriala = f.tensiuneArteriala;
-		this->modelMedicament = f.modelMedicament;
+		if (f.nrMedicamente > 0 && f.medicamente != nullptr)
+		{
+			this->nrMedicamente = nrMedicamente;
+			this->medicamente = new Medicament * [this->nrMedicamente];
+			for (int i = 0; i < this->nrMedicamente; i++)
+			{
+				this->medicamente[i] = new Medicament(*f.medicamente[i]);
+			}
+		}
+		else
+		{
+			this->nrMedicamente = 0;
+			this->medicamente = nullptr;
+		}
 	}
 
 	//operatorul =
@@ -1213,6 +1243,20 @@ public:
 			this->contactTelefon = f.contactTelefon;
 			this->adresa = f.adresa;
 			this->tensiuneArteriala = f.tensiuneArteriala;
+			if (f.nrMedicamente > 0 && f.medicamente != nullptr)
+			{
+				this->nrMedicamente = f.nrMedicamente;
+				this->medicamente = new Medicament * [this->nrMedicamente];
+				for (int i = 0; i < this->nrMedicamente; i++)
+				{
+					this->medicamente[i] = new Medicament(*f.medicamente[i]);
+				}
+			}
+			else
+			{
+				this->nrMedicamente = 0;
+				this->medicamente = nullptr;
+			}
 		}
 
 		return *this;
@@ -1267,12 +1311,8 @@ public:
 
 	}
 
-	void setMedicament(const Medicament& medicament)
-	{
-		this->modelMedicament = medicament;
-	}
 
-	friend ostream& operator<<(ostream& consola, Farmacie& farmacie)
+	friend ostream& operator<<(ostream& consola, const Farmacie& farmacie)
 	{
 
 		consola << "Nume farmacie: " << farmacie.numeFarmacie << endl;
@@ -1286,7 +1326,12 @@ public:
 		{
 			consola << "Din pacate, farmacia nu ofera consultare gratuita a tensiunii arteriale." << endl;
 		}
-		consola << "Informatii medicament: " << farmacie.modelMedicament << endl;
+		consola << "Numar medicamente: " << farmacie.nrMedicamente << endl;
+		consola << "Medicamente: " << endl;
+		for (int i = 0; i < farmacie.nrMedicamente; i++)
+		{
+			consola << *farmacie.medicamente[i] << endl;
+		}
 
 		return consola;
 
@@ -1302,19 +1347,6 @@ public:
 
 		return tast;
 
-	}
-
-	void afisareMedicamentDinFarmacie()
-	{
-		if (modelMedicament.getStoc() == true)
-		{
-			cout << "Medicamentul [" << modelMedicament.getNume() << "] se afla in stocul farmaciei [" << numeFarmacie << "] de la adresa [" << adresa << "]";
-		}
-		else
-		{
-			cout << "Medicamentul [" << modelMedicament.getNume() << "] NU se afla in stocul farmaciei [" << numeFarmacie << "] de la adresa [" << adresa << "]";
-
-		}
 	}
 
 	bool operator!=(const Farmacie& farmacie)
@@ -2700,15 +2732,15 @@ int main()
 	//cout << "" << endl;
 
 
-	//// CLASA 5 - DETALII SANATATE
-	//cout << "--- --- --- DETALII SANATATE --- --- ---" << endl;
+	//// CLASA 5 - PACIENT SANATOS
+	//cout << "--- --- --- PACIENT SANATOS --- --- ---" << endl;
 	//cout << "" << endl;
 
 	//cout << "Testare constructor implicit: " << endl;
 
 	//cout << "" << endl;
-	//DetaliiSanatate detalii1;
-	//cout << detalii1 << endl;
+	//PacientSanatos pacientSanatos1;
+	//cout << pacientSanatos1 << endl;
 	//cout << "" << endl;
 
 	//cout << "Testare constructor cu toti parametrii: " << endl;
@@ -2716,8 +2748,8 @@ int main()
 	//cout << "" << endl;
 	//int nrConsultatii = 3;
 	//int* frecventaCardiaca = new int[nrConsultatii] {80, 85, 90};
-	//DetaliiSanatate detalii2(nrConsultatii, frecventaCardiaca, 77, 115, 65, "Ionut Mihaescu", "Camera 105", 35, "Masculin", 1, 177, 76);
-	//cout << detalii2 << endl;
+	//PacientSanatos pacientSanatos2(nrConsultatii, frecventaCardiaca, 77, 115, 65, "Ionut Mihaescu", "Camera 105", 35, "Masculin", 1, 177, 76);
+	//cout << pacientSanatos2 << endl;
 	//cout << "" << endl;
 
 	//cout << "" << endl;
@@ -2726,8 +2758,8 @@ int main()
 
 	//cout << "Testarea constructorului de copiere: " << endl;
 	//cout << "" << endl;
-	//DetaliiSanatate detalii3 = detalii2;
-	//cout << detalii3 << endl;
+	//PacientSanatos pacientSanatos3 = pacientSanatos2;
+	//cout << pacientSanatos3 << endl;
 	//cout << "" << endl;
 
 	//cout << "" << endl;
@@ -2737,27 +2769,27 @@ int main()
 	//cout << "Testarea get-erilor si set-erilor pentru obiectul de mai devreme: " << endl;
 	//cout << "" << endl;
 
-	//cout << detalii3.getNrConsultatii() << endl;
-	//int* frecventa = detalii3.getFrecventa();
-	//for (int i = 0; i < detalii3.getNrConsultatii()-1; i++)
+	//cout << pacientSanatos3.getNrConsultatii() << endl;
+	//int* frecventa = pacientSanatos3.getFrecventa();
+	//for (int i = 0; i < pacientSanatos3.getNrConsultatii()-1; i++)
 	//{
 	//	cout << frecventa[i] << ", ";
 	//}
-	//cout << frecventa[detalii3.getNrConsultatii() - 1] << endl;
-	//cout << detalii3.getNivelZahar() << endl;
-	//cout << detalii3.getSistolica() << endl;
-	//cout << detalii3.getDiastolica() << endl;
+	//cout << frecventa[pacientSanatos3.getNrConsultatii() - 1] << endl;
+	//cout << pacientSanatos3.getNivelZahar() << endl;
+	//cout << pacientSanatos3.getSistolica() << endl;
+	//cout << pacientSanatos3.getDiastolica() << endl;
 
 	//cout << "-----------------------" << endl;
 
 	//int nrConsultatii1 = 5;
 	//int* frecventa1 = new int[nrConsultatii1] { 75, 76, 80, 87, 90};
-	//detalii3.setNrConsultatii(nrConsultatii1);
-	//detalii3.setFrecventa(nrConsultatii1, frecventa1);
-	//detalii3.setNivelZahar(80);
-	//detalii3.setSistolica(115);
-	//detalii3.setDiastolica(85);
-	//cout << detalii3 << endl;
+	//pacientSanatos3.setNrConsultatii(nrConsultatii1);
+	//pacientSanatos3.setFrecventa(nrConsultatii1, frecventa1);
+	//pacientSanatos3.setNivelZahar(80);
+	//pacientSanatos3.setSistolica(115);
+	//pacientSanatos3.setDiastolica(85);
+	//cout << pacientSanatos3 << endl;
 
 	//cout << "-------------------------" << endl;
 	//cout << "" << endl;
@@ -2765,9 +2797,9 @@ int main()
 	//cout << "Testarea operatorului =: " << endl;
 	//cout << "" << endl;
 
-	//DetaliiSanatate detalii4;
-	//detalii4 = detalii3;
-	//cout << detalii4;
+	//PacientSanatos pacientSanatos4;
+	//pacientSanatos4 = pacientSanatos3;
+	//cout << pacientSanatos4;
 
 	//cout << "" << endl;
 	//cout << "-------------------------" << endl;
@@ -2775,9 +2807,9 @@ int main()
 
 	//cout << "Testarea metodei de calculare a frecventei medie, cat si functia prietena: " << endl;
 
-	//detalii4.calculareFrecventaMedie();
+	//pacientSanatos4.calculareFrecventaMedie();
 	//cout << "" << endl;
-	//detaliiNivelZahar(detalii4);
+	//detaliiNivelZahar(pacientSanatos4);
 
 	//cout << "" << endl;
 	//cout << "-------------------------" << endl;
@@ -2786,7 +2818,7 @@ int main()
 	//cout << "Realizare upcasting:" << endl;
 	//cout << "" << endl;
 
-	//Pacient* pacientCasting = &detalii4;
+	//Pacient* pacientCasting = &pacientSanatos4;
 
 	//pacientCasting->setNume("Izabela Moraru");
 	//pacientCasting->setVarsta(24);
